@@ -1,0 +1,199 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %} 
+
+{% block content %}
+
+
+
+
+<section class="section">
+    <div class="container">
+        <!-- vcentered gives the text vertical aligment so its in middle of page instead of using padding to adjust the location fo the text -->
+        <!-- is-multiline allows anything over 12 columns to go on a 2nd line as accumatively columns can exceed 12 column width which is what css allows for -->
+        <div class="columns is-vcentered is-multiline">
+            <div class="column is-6-tablet is-3-desktop">
+                <h1 class="is-size-3-mobile is-size-1-desktop title">{{ product.name }}</h1>
+                <p> Description: {{ product.description }}</p>
+            </div>
+                <div class="column is-6-tablet is-5-desktop has-text-centered">
+                    <img src="{% if product.image %}
+                    {{ product.image.url }}
+                    {% else %}https://via.placeholder.com/240x240.jpeg
+                    {% endif %}" alt="Woman in Red dress" class="px-6 is-rounded">
+                </div>
+
+                <div class="column is-12-tablet is-4-desktop">
+                    <div class="is-size-4-desktop mb-4">PKR {{ product.price }}</div>
+                    {% if product.get_rating > 0 %}
+                    <p class="subtitle mt-3">Samosas:  {{ product.get_rating }} out of 5 Samosas</p>
+                    {% else %}
+                    <p class="mb-3 subtitle">No Samosas yet</p>
+                    {% endif %}
+
+                    <!-- dropdown menu -->
+                    <form class="mb-4">
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-info">
+                                    <select>
+                                        <option>XS - ExtraSmall</option>
+                                        <option>S - Small</option>
+                                        <option>M - Medium</option>
+                                        <option>L - Large</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <button 
+                    hx-get="{% url 'add_to_cart' product.id %}"
+                    hx-target="#menu-cart-button"
+                    hx-swap="outerHTML"
+                    class="button is-dark is-medium is-rounded mt-4">Add to Cart</button>
+                    
+                </div>
+
+               
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container">
+        <!-- is-8 is-variable  - combined allows for gaps in the columns gap 1-8 but variable has to be added to the class -->
+    <div class="columns is-8 is-variable">
+        <div class="column is-7-tablet">
+            <!-- tabbed content -->
+            <div class="tabs is-boxed">
+                <ul>
+                    <li class="is-active" data-tab="product-details" hx-trigger="click">
+                        <a>Product Detail</a>
+                    </li>
+
+                    <li data-tab="delivery-info" hx-trigger="click">
+                        <a>Delivery info</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="px-2" id="tab-content">
+                <div id="product-details">
+                    <h3 class="is-size-5 title">Product Details</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem doloribus perferendis rem reiciendis voluptatibus aspernatur corrupti in neque iure natus distinctio quo qui consectetur et porro, unde, minus magnam atque?</p>
+                </div>
+            </div>
+            <div class="px-2" id="tab-content">
+                <div id="delivery-info" class="is-hidden">
+                    <h3 class="is-size-5 title">Delivery Info</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, quaerat. Ratione aperiam qui earum expedita. Dignissimos quam natus iure laboriosam aliquid ab ad, illo, minima voluptatem nemo delectus quasi, itaque dolorem commodi. Explicabo ea labore excepturi provident omnis quas amet dicta mollitia sunt inventore suscipit accusantium odit, fugiat aliquam debitis. Sequi veniam nobis, velit deserunt consequuntur quisquam. Magni atque, porro veniam vero autem quo ullam! Aspernatur, delectus aliquid mollitia eveniet suscipit porro laborum rerum at aut repudiandae veritatis. Asperiores quasi incidunt iusto consequuntur quo accusamus, eum repellat ipsa mollitia esse reprehenderit fugiat itaque beatae veritatis reiciendis quam ipsum commodi omnis?</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!--REVIEW SECTION  -->
+
+
+
+        <div class="column is-5">
+           <div class="title mt-4"> Reviews</div>
+          
+
+           {% if request.user.is_authenticated %}
+            
+           <form method = 'Post' action=".">
+            {% csrf_token %}
+               
+              
+
+               <!-- rating  -->
+               <div class="field">
+                <div class="control">
+
+                    <div class="level ">
+                        <div class="level-right">
+                            <div class="level-item">
+                                <div class="select">
+                                    <select name="rating">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="level-item"> 
+                                    <p class="subtitle">Give A Samosa! 🥟</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <!-- rating end -->
+
+            <!-- comment content -->
+            <div class="message is-link">
+                <div class="message-header ">
+                    <p >Comment</p>
+                    <!-- <button class="delete" aria-label="delete"></button> -->
+                </div>
+                <textarea name="content" class="message-body ml-4 mt-4 mb-2 p-3 has-text-left">
+                  
+                </textarea>
+                <button class="button is-primary mt-4 mb-5">Submit</button>
+            </div>
+            <!-- end comment section -->
+        </form>
+       
+
+
+
+        <!-- past reviews for product -->
+
+        {% for review in product.reviews.all %}
+
+        <div class="card mt-3 mb-3">
+            <div class="card-image">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-48x48">
+                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p class="title is-4">{{ review.created_by }}</p>
+                  <!-- <p class="subtitle is-6">@johnsmith</p> -->
+                </div>
+              </div>
+          
+              <div class="content subtitle">
+                {{ review.content }}
+                
+                <br>
+              </div>
+              <div> Date Submitted: {{ review.created_at|date:'d-m-Y' }}</div>
+              <div name="rating" class="content subtitle">
+               Samosas: {{ review.rating }}/5 Samosas
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+    {% else %}
+       <div class="subtitle mt-2 has-text-weight-bold"> <a href="{% url 'signup' %}">Signup</a> or <a href="{% url 'login' %}">Login</a>  to see and add reviews!</div>
+    {% endif%}
+           
+        </div>
+    </div>
+    </div>
+</section>
+
+
+{% endblock %}

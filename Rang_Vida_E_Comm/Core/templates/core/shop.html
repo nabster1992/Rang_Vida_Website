@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Shop Til Ya Drop!{% endblock %} 
+
+{% block content %}
+  <div class="columns mt-4 ml-3">
+
+    <!-- Search Bar -->
+    
+    <div class="column is-narrow-desktop ">
+        <form method="get" action=".">
+            <!-- form is importnat for making th ebutton work, the button "gets" the query -->
+        <div class="field is-grouped">
+            <p class="control has-icons-right">
+            <input type="text" name='query' class="input" placeholder="Search">
+            <span class="icon is-small is-right">
+            <i class="fas fa-magnifying-glass"></i>
+            </span>
+            <p class="control is-expanded">
+            <button class="button is-info">Search</button>
+            </p>
+        </div>
+        </form>
+        
+        
+
+      <!-- sidebar menu -->
+      <div class="menu mt-4">
+        <div class="menu-label is-bold">
+          <p>Categories</p>
+        </div>
+        
+        <ul class="menu-list">
+            <li><a href="{% url 'shop' %}" class="{% if category.slug == category_active %} is-active {% else %} is-dark{% endif %}">
+                All Categories</a></li>
+            {% for category in categories %}
+          
+            <li><a href="{% url 'shop' %}?category={{ category.slug }}" 
+                class="{% if category.slug == category_active %} is-active {% else %} is-dark{% endif %}">
+                {{ category.name }}</a></li>
+          <!-- ?category={{ category.slug }}: This part adds a query parameter to the URL. The category parameter is set to the value of category.slug. The {{ category.slug }} part is a Django template variable that retrieves the slug attribute of the category object. -->
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+   
+      
+    
+
+    <!-- Content -->
+    <div class="column">
+      <section>
+        <div class="container">
+            <div class="columns is-variable mt-5 is-multiline">
+              <!-- Card 1 -->
+              {% for product in products %}
+              {% include 'product/partials/product_item_list.html'%}
+              {% endfor %}
+            </div>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}

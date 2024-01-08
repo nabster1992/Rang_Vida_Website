@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Login{% endblock %} 
+
+{% block content %}
+<div class="columns is-centered m-4">
+    <div class="column is-4 ">
+        <form method="post" action="." class="box has-text-black">  
+          {% csrf_token %}
+            <div class="field mb-4">
+              <label class="label">Username</label>
+              <div class="control">
+                <input class="input" type="text" name="username" placeholder="superbhabi">
+              </div>
+            </div>
+          
+            <div class="field mb-4">
+              <label class="label">Password</label>
+              <div class="control">
+                <input class="input" name="password" type="password" placeholder="********">
+                 </p>
+              </div>
+            </div>
+
+            {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                <div class="has-text-danger">
+                  <p>{{ error|escape }}</p>
+                </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% for error in form.non_field_errors %}
+              <div class="has-text-danger">
+                <p>{{ error|escape }}</p>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          
+        
+          
+            <button class="button is-dark is-rounded">Login</button>
+          </form>
+    </div>
+</div>
+
+   
+{% endblock %}

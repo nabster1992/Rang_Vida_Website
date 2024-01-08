@@ -1,0 +1,103 @@
+{% extends 'core/base.html' %} {% block title %} Account!{% endblock %}
+
+ {% block content %}
+        <!-- layout of page-->
+    <div class="container">
+        <div class="columns is-vcentered mt-4 mb-4">
+            <div class="column is-8">
+
+                <!-- my account ssection -->
+                <h1 class="title mb-3">My Account</h1>
+                    <div><span>{{ request.user.get_full_name }}</span></div>
+                    <div><span>{{ request.user.username }}</span></div>
+                    <div><span>{{ request.user.email }}</span></div>
+                    <a href="{% url 'edit_myaccount' %}">
+                        <button class="button is-dark mt-4 mb-4">Edit Basic Info</button></a>
+                        <!-- for the button to work it needs to be wrapped inside the anchor tag -->
+                <!-- end my account section -->
+
+        <!-- my orders section -->
+        <h3 class="title mb-3">My Orders</h3>
+        {% for order in request.user.orders.all %}
+            <div class="card mb-4">
+                <!-- order id header -->
+                <header class="card-header mb-3">
+                        <p class="card-header-title">
+                            Order Id: {{ order.id }}
+                        </p>
+
+                <button class="card-header-icon" aria-label="more options">
+                    <span class="icon">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </button>
+                <!-- end order id header -->
+
+                </header>
+                
+                <!-- orders loop -->
+                {% for item in order.items.all %}
+                    
+                        <div class="card-content">
+                        <div class="content">
+                           
+                            <div class="level">
+                                        <div class="level-left">
+                        
+                                            <div class="level-item ml-3">
+                                                <a href="#"> {{ item.product.name }}</a>
+                                            </div>
+                                            <div class="level-item ml-3">
+                                            <p >Price PKR {{ item.get_total_price }}</p>
+                                            </div>
+                                            <div class="level-item ml-3">
+                                                <p >Quantity {{ item.quantity }}</p>
+                                            </div>
+                        
+                                        </div>
+                                        <div class="level-right">
+                                            <div class="level-item">
+                                                <figure class="image is-96x96 mb-6">
+                                                    <img src="{{ item.product.get_thumbnail }}" />
+                                                    </figure>
+                                            </div>
+                                        </div>
+                        
+                            </div>
+                            
+                        </div>
+                        </div>
+                    
+
+                    {% endfor %}
+                    <!-- end orders loop -->
+
+                
+                    <!-- orders footer section -->
+                <footer class="card-footer ">
+                    <p class="is-medium m-3"> Order Date: {{ order.created_at }}</p>
+                    <p class="is-medium m-3">Total: PKR{{ order.get_total_price }}</p>
+                </footer>
+                <footer class="card-footer mt-4">
+                <a href="#" class="card-footer-item">Reorder Items</a>
+                <a href="#" class="card-footer-item">Refund/Exchange</a>
+                <a href="#" class="card-footer-item">Leave Review</a>
+                </footer>
+                
+                
+                
+        {% endfor %}
+        <!-- end my orders section -->
+
+    
+        </div>
+        </div>
+        </div>
+    </div>
+        
+
+        
+
+
+    
+{% endblock %}

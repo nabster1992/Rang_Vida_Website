@@ -1,0 +1,275 @@
+{% extends 'core/base.html' %} {% block title %}CheckOut{% endblock %} 
+{% block content %}
+
+
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Checkout</h1>
+
+   
+
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <!-- Order Summary -->
+        <div class="box">
+          <h2 class="subtitle">Contact information</h2>
+
+          <div class="field">
+            <label class="label mt-2">First Name</label>
+            <div class="control">
+              <input
+                type="text"
+                class="input"
+                placeholder="Raheel"
+                name="first_name"
+                value="{{ request.user.first_name }}"
+              />
+            </div>
+
+            <label class="label mt-2">Last Name</label>
+            <div class="control">
+              <input
+                type="text"
+                class="input"
+                placeholder="Jutt"
+                name="last_name"
+                value="{{ request.user.last_name }}"
+              />
+            </div>
+
+            <label class="label mt-2">Phone</label>
+            <div class="control">
+              <input
+                type="text"
+                class="input"
+                placeholder="0321 456-7890"
+                name="phone"
+              />
+            </div>
+
+            <label class="label mt-2">Email</label>
+            <div class="control">
+              <input
+                type="email"
+                class="input"
+                placeholder="Imran_Khan@pti.com"
+                name="email"
+                value="{{ request.user.email }}"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Shippin -->
+        <div class="box">
+          <h2 class="subtitle">Shipping Information</h2>
+
+          <label class="label mt-4">Building No./House No.</label>
+          <div class="control">
+            <input
+              type="text"
+              class="input"
+              placeholder="house 1196 flat 3"
+              name="address1"
+            />
+          </div>
+
+          <label class="label mt-4">Town/City/Sector</label>
+          <div class="control">
+            <input
+              type="text"
+              class="input"
+              placeholder="DHA Phase 9 sector C"
+              name="address2"
+            />
+          </div>
+
+          <label class="label mt-4">Province</label>
+          <div class="control">
+            <input
+              type="text"
+              class="input"
+              placeholder="Punjab"
+              name="place"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <!-- Order Total -->
+        <div class="box">
+          <h2 class="subtitle">Order Total</h2>
+          <!-- Your order total details go here -->
+
+          <p class="is-flex is-justify-content-space-evenly">
+            <strong class="mr-auto">Total:</strong>
+            <span>PKR {{ cart.get_total_cost }}</span>
+          </p>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="box">
+          <h2 class="subtitle">Payment Information</h2>
+
+          <div class="field is-multiline">
+            <div class="control m-auto">
+              <label class="checkbox">
+                <input type="checkbox" />
+                <span>Cash-On-Delivery</span>
+              </label>
+            </div>
+            <div class="control m-auto">
+              <label class="checkbox">
+                <input type="checkbox" />
+                <span>Credit Card</span>
+              </label>
+            </div>
+          </div>
+          <!-- <div class="field">
+                <label class="label mt-2">Name on Card</label>
+                <div class="control">
+                    <input type="text" class="input" placeholder="Bhabi Super">
+                </div>
+                <label class="label mt-2">Card Number</label>
+                <div class="control">
+                    <input type="text" class="input" placeholder="01234-56788-9985-4432">
+                </div>
+                <label class="label mt-2">Expiration Date</label>
+                <div class="control">
+                    <input type="text" class="input" placeholder="01/2025">
+                </div>
+                <label class="label mt-2">CVV</label>
+                <div class="control">
+                    <input type="text" class="input" placeholder="786">
+                </div>
+            </div>
+        
+        
+        </div> -->
+
+          <!-- Place Order Button -->
+          <div class="field mt-3">
+            <div class="control">
+              <button
+                onclick="buy(event)"
+                class="button is-primary is-fullwidth"
+              >
+                Place Order
+              </button>
+              <div class="notification mt-4 is-danger is-light" id="errors">
+                <button class="delete"></button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="application/javascript" src="https://js.stripe.com/v3/"></script>
+<script>
+  let el = document.querySelector('#errors')
+
+  function validateForm(data) {
+    let errors = []
+        if (data.first_name === '') {
+            errors.push('First name is empty')
+
+        }
+        if (data.last_name === '') {
+            errors.push('last  name is empty')
+
+        }
+        if (data.email === '') {
+            errors.push('email is empty')
+
+        }
+        if (data.phone === '') {
+            errors.push('You havent entered a Phone no.')
+
+        }
+        if (data.address1 === '') {
+            errors.push('The address field is empty')
+
+        }
+        if (data.address2 === '') {
+            errors.push('The address field is empty')
+
+        }
+        if (data.place === '') {
+            errors.push('Please enter the province/state to continue')
+
+        }
+
+        if (errors.length > 0) {
+            let html = '<ul>';
+            
+            errors.forEach((error) => {
+                html += '<li>' + error + '</li>';
+            })
+
+            el.innerHTML = html + '</ul>';
+        } else {
+            el.innerHTML = '';
+        }
+
+        return errors
+  }
+
+  function buy(event) {
+    event.preventDefault();
+
+    let data =  {
+        'first_name': document.querySelector('input[name=first_name]').value, 
+        'last_name': document.querySelector('input[name=last_name]').value, 
+        'email': document.querySelector('input[name=email]').value, 
+        'phone': document.querySelector('input[name=phone]').value, 
+        'address1': document.querySelector('input[name=address1]').value, 
+        'address2': document.querySelector('input[name=address2]').value, 
+        'place': document.querySelector('input[name=place]').value, 
+    }
+
+
+    let errors = validateForm(data)
+
+    if (errors.length) {
+    console.log('Errors', errors)
+    } else {
+        var stripe = Stripe('{{ pub_key}}')
+    
+        fetch('/orders/start_order/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            credentials: 'same-origin',
+                body: JSON.stringify(data)
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(session) {
+            return stripe.redirectToCheckout({ sessionId: session.session.id })
+        })
+        .then(function(result) {
+            if (result.error) {
+                alert(result.error.message)
+            }
+        })
+        .catch(function(error) {
+            console.log('Errors', error)
+        })
+    }    
+     
+
+    return false;
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+  
+  {% extends 'core/base.html' %}
+  
+  {% block title %}Khush Hamadi!{% endblock %}  
+  
+ 
+  
+  
+  {% block content %}
+  <!-- hero -->
+    
+  <section class="hero is-warning is-halfheight ">
+    <div class="hero-body">
+        <p class="title">Rang Vida</p>
+        <p class="subtitle ml-3">The House of Dresses</p>
+    </div>
+<!-- hero button -->
+    <div class="block has-text-centered mb-6">
+        <a href="{% url 'shop' %}"><button class="button is-link is-medium is-rounded px-5">Start Shopping Yo!</button>  </a>
+    </div>
+
+</section>
+
+<section class="container">
+
+<div class="columns mt-5 is-8 is-variable is-multiline ">
+    <!-- Card 1 -->
+    
+    
+    {% for product in products %}
+   
+    {% include 'product/partials/product_item_list.html' %}
+       
+
+    {% endfor%}
+
+    {% endblock %}
+</section>
+
+
+
+

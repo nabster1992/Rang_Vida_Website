@@ -1,0 +1,42 @@
+<div class="column is-one-quarter-desktop mb-3">
+    <div class="card">
+      <a href="{% url 'product' product.slug %}">
+      <div class="card-image has-text-centered px-1">
+        <img class="mt-2" src="{{ product.image.url}}" alt="">
+      </div>
+      </a>
+      <div class="card-content">
+        <p>PKR {{ product.price }}</p>
+        <a href="{% url 'product' product.slug %}" class="title is-size-5">{{ product.name }}</a>
+      </div>
+
+        <!-- dropdown menu select size -->
+        <form class="mb-4">
+          <div class="field">
+              <div class="control">
+                  <div class="select is-info m-2">
+                      <select>
+                          <option>Select Size</option>
+                          <option>XS - ExtraSmall</option>
+                          <option>S - Small</option>
+                          <option>M - Medium</option>
+                          <option>L - Large</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+      </form>
+
+      <!-- add to cart icon (baggie) -->
+      <a 
+      hx-get="{% url 'add_to_cart' product.id %}"
+      hx-target="#menu-cart-button"
+      hx-swap="outerHTML"> <i class="fa-regular fa-bag-shopping py-3 m-4"></i>Add to Baggie</a>
+    </div>
+
+    <footer class="card-footer">
+      <p class="card-footer-item"> 
+        <a href="{% url 'product' product.slug %}" class="has-text-grey">View</a>
+      </p>
+    </footer>
+  </div>

@@ -1,0 +1,41 @@
+{% for item in cart %}
+  <div class="card mb-3 card is-danger" id="cart-item-{{ item.product.id }}">
+      <div class="card-image p-3">
+        <article class="media">
+          <div class="media-left">
+              <a href="{% url 'product' item.product.slug %}">
+                <figure class="image is-96x96 m-auto">
+                    <img src="{{ item.product.get_thumbnail }}" alt="Image"/>
+                </figure>
+              </a>
+          </div>
+          <div class="block p-2">
+
+            <a href="{% url 'product' item.product.slug %}"><strong>{{ item.product.name }}</strong></a>
+            <p>PKR {{ item.total_price }}</p>
+            
+            <div class="block">
+              <a
+              hx-get="{% url 'update_cart' item.product.id 'increment' %}"
+              hx-target="#cart-item-{{ item.product.id }}"
+              hx-swap="outerHTML">+</a>
+
+              <span class="p-2">{{ item.quantity }}</span>
+              
+              <a
+              hx-get="{% url 'update_cart' item.product.id 'decrement' %}"
+              hx-target="#cart-item-{{ item.product.id }}"
+              hx-swap="outerHTML">-</a>
+            </div>
+
+          
+        </div>
+      </div>
+      <!-- additional item optinos like delete edit -->
+      <footer class="card-footer mt-4">
+        <a href="#" class="card-footer-item">Save</a>
+        <a href="#" class="card-footer-item">Edit</a>
+        <a href="#" class="card-footer-item">Delete</a>
+      </footer>
+  </div> 
+{% endfor %}

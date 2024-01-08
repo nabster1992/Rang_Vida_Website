@@ -1,0 +1,76 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Your Baggie{% endblock %} 
+
+
+
+{% block content %}
+
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Your Baggie</h1>
+
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <!-- Order Summary -->
+        <div class="box">
+          <h2 class="subtitle">Order Summary</h2>
+
+          <!-- checkout item 1 -->
+          
+          {% include 'cart/partials/cart_item.html' %}
+       
+          
+
+        
+        </div>
+      </div>
+      <div class="column">
+        <!-- Order Total -->
+        <div class="box">
+          <h2 class="subtitle">Order Total</h2>
+          <!-- Your order total details go here -->
+  
+          <p class="is-flex is-justify-content-space-evenly">
+              <strong class="mr-auto" >Total:</strong>
+              <span
+              hx-get="{% url 'hx_cart_total' %}"
+              hx-trigger="update-menu-cart from:body"
+              hx-swap="innerhtml">
+            
+            {% include 'cart/partials/cart_total.html' %}</span>
+          </p> 
+
+           <!-- go to check out Button -->
+           <div class="field mt-3">
+            <div class="control">
+              <a href="{% url 'checkout' %}">
+                <button class="button is-primary is-fullwidth">
+                  <!-- for the button to work it needs to be wrapped inside the anchor tag -->
+              
+                  Checkout</button>
+                </div>
+              </a>
+            
+            
+        </div>
+        </div>
+      </div>  
+    </div>
+
+    
+
+        
+
+            
+</div>
+</section>
+
+</body>
+</html>
+
+
+{% endblock %}
+
+

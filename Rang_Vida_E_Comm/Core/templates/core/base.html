@@ -1,0 +1,143 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <!-- Our project just needs Font Awesome Free's Solid and Brand files -->
+    <!-- <link rel="stylesheet" href="static/style.css" >
+    <link href="~bulma-carousel/dist/css/bulma-carousel.min.css" rel="stylesheet"> -->
+    <link
+      href="{% static 'fontawesomefree/css/fontawesome.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{% static 'fontawesomefree/css/brands.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{% static 'fontawesomefree/css/solid.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <title>{% block title %}{% endblock %} | RangVida</title>
+
+    <!-- logo -->
+    <div class="block">
+      <a href="{% url 'frontpage'%}">
+        <img
+          src="{% static 'static/logo-no-background.png' %}"
+          alt="RangVida"
+        />
+      </a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar is-black">
+      <div class="navbar-brand">
+        <a class="navbar-item">
+          <img
+            src="{% static 'logo-no-background.png' %}"
+            alt=""
+            style="max-height: 300px"
+            class="py-2 px-2"
+          />
+        </a>
+        <a class="navbar-burger" id="burger">
+          <!-- the spans create the lines for the hamburger -->
+          <span></span>
+          <span></span>
+          <span></span>
+        </a>
+      </div>
+
+      <div class="navbar-menu" id="nav-links">
+        <div class="navbar-end">
+          <!-- this connects the shop.html to this button -->
+          <div
+            hx-get="{% url 'hx_menu_cart' %}"
+            hx-trigger="update-menu-cart from:body"
+            hx-swap="innerhtml"
+          >
+            {% include 'cart/partials/menu_cart.html' %}
+          </div>
+          <a href="{% url 'shop' %}" class="navbar-item"
+            ><i class="fa-solid fa-burst mr-3"></i>All Dresses</a
+          >
+          <!-- <a  class="navbar-item"><i class="fa-solid fa-user mr-3"></i>Account</a> -->
+
+          <a href="{% url 'signup' %}" class="navbar-item"
+            ><i class="fa-solid fa-person-skiing-nordic mr-3"></i>Signup</a
+          >
+
+          <!-- I was trying to fix this all day long as i kept getting error 405 method not allowed, then i figured that i have to mention that the post method should be used specifically so i made a form and entered it here and it worked and im iusing template tag if condition to toggle between login and logout which is pretty neat too -->
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'myaccount' %}" class="navbar-item"
+            ><i class="fa-solid fa-user mr-3"></i>My Account</a
+          >
+          <form method="post" action="{% url 'logout' %}" class="navbar-item">
+            {% csrf_token %}
+            <button type="submit" class="button is-black">Logout</button>
+          </form>
+          {% else %}
+          <a href="{% url 'login' %}" class="navbar-item">Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </head>
+
+  <body>
+    <main>{% block content%} {% endblock%}</main>
+  </body>
+
+  <footer class="footer has-background-black">
+    <div class="container">
+      <div class="columns is-8-is-variable">
+        <div class="column is-10-tablet is-10-desktop">
+          <div class="content has-text-white">
+            <h2 class="has-text-link-light">About Us</h2>
+            <p>©️ Copyright 2023 Nabeel Hussain</p>
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              rem deleniti. Illum nulla, voluptate voluptates consequatur
+              ratione quisquam ut in!
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-2-tablet is-2-desktop">
+          <div class="content has-text-white">
+            <h2 class="has-text-white">Social Links</h2>
+          </div>
+          <ul>
+            <li>
+              <span class="icon is-medium">
+                <i class="fa-brands fa-instagram"></i> </span
+              >Instagram
+            </li>
+            <li>
+              <span class="icon is-medium">
+                <i class="fa-brands fa-whatsapp"></i> </span
+              >WhatsApp 03333023935
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- <script src="~bulma-carousel/dist/js/bulma-carousel.min.js"></script> -->
+  <script
+    src="https://unpkg.com/htmx.org@1.9.9"
+    integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+    crossorigin="anonymous"
+  ></script>
+  {% block scripts %} {% endblock %}
+</html>

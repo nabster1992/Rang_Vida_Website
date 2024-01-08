@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Signup{% endblock %} 
+
+{% block content %}
+<div class="columns is-centered m-4">
+    <div class="column is-4 ">
+        <form method="post" action="." class="box">
+          {% csrf_token %}
+          
+
+          <!-- username -->
+          <div class="field mb-4">
+            <label class="label">Username</label>
+            <div class="control">
+              <input class="input" name="username" type="text" placeholder="super_bhabi">
+            
+            </div>
+          </div>
+
+              <!-- first name -->
+            <div class="field mb-4">
+              <label class="label">First Name</label>
+              <div class="control">
+                <input class="input" name="first_name" type="text" placeholder="bhabi">
+              
+              </div>
+            </div>
+
+            <!-- last name -->
+            <div class="field mb-4">
+              <label class="label">Last Name</label>
+              <div class="control">
+                <input class="input" name="last_name" type="text" placeholder="kabab da haddi">
+                
+              </div>
+            </div>
+
+               <!-- enter email -->
+              <label class="label">Email</label>
+              <div class="control">
+                <input class="input" type="email" name="email" placeholder="e.g. imran_khan@pti.com">
+                <p>Email must have @ sign and .com .info .gov etc</p>
+              </div>
+            
+               <!-- create password -->
+            <div class="field mb-4">
+              <label class="label">Password</label>
+              <div class="control">
+                <input class="input" type="password" name="password1" placeholder="********">
+                <p>Password must
+                    <li> Be atleast 8 characters numbers or letters</li>
+                    <li>Have a special character like !@#$%^&*</li>
+                 </p>
+              </div>
+            </div>
+            
+            <!-- confirm password -->
+            <div class="field mb-4">
+              <label class="label">Confirm Password</label>
+              <div class="control">
+                <input class="input" type="password" name="password2" placeholder="********">
+              </div>
+            </div>
+
+            {% if form.errors %}
+              {% for field in form %}
+                  {% for error in field.errors %}
+                  <div class="has-text-danger">
+                    <p>{{ error|escape }}</p>
+                  </div>
+                  {% endfor %}
+              {% endfor %}
+
+              {% for error in form.non_field_errors %}
+                <div class="has-text-danger">
+                  <p>{{ error|escape }}</p>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <div class="field">
+              <div class="control">
+              <label class="checkbox">
+                  <input type="checkbox">
+                  I agree to the <a href="#">Terms & Conditions</a>
+              </label>
+              </div>
+          </div>
+           
+          
+            <button class="button is-dark is-rounded">Sign up</button>
+          </form>
+    </div>
+</div>
+
+   
+{% endblock %}
